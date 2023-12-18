@@ -40,14 +40,7 @@ func _on_ball_collision(body):
 	# handling 3 touches rule
 	# (this could cause problems with learning)
 	elif body.is_in_group("player"):
-		if collision_side == prev_touch_side:
-			touch_counter += 1
-			if touch_counter > 3:
-				# reusing ball_on_ground signal (that's lame tbh)
-				handle_3touches_reset(collision_side)
-		else:
-			touch_counter = 1
-			prev_touch_side = collision_side
+		handle_3touches_reset(collision_side)
 
 
 func handle_ball_on_ground_reset(collision_side: int):
@@ -57,5 +50,11 @@ func handle_ball_on_ground_reset(collision_side: int):
 	reset(-collision_side)
 	
 func handle_3touches_reset(collision_side: int):
-	more_than_three_touches.emit(-collision_side)
-	reset(-collision_side)
+	if collision_side == prev_touch_side:
+		touch_counter += 1
+		if touch_counter > 3:
+			more_than_three_touches.emit(-collision_side)
+			reset(-collision_side)
+	else:
+		touch_counter = 1
+		prev_touch_side = collision_side
