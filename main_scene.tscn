@@ -1,0 +1,51 @@
+[gd_scene load_steps=8 format=3 uid="uid://dgmvb2l8d7xh6"]
+
+[ext_resource type="Script" path="res://Scripts/World.gd" id="1_uodo2"]
+[ext_resource type="Script" path="res://Scripts/Grid.gd" id="2_k62nf"]
+[ext_resource type="Texture2D" uid="uid://dym6431hs5hpp" path="res://Textures/sky1.jpg" id="4_vg15d"]
+[ext_resource type="Script" path="res://Scripts/Camera.gd" id="7_4g5f6"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_c8n80"]
+panorama = ExtResource("4_vg15d")
+
+[sub_resource type="Sky" id="Sky_sn0xq"]
+sky_material = SubResource("PanoramaSkyMaterial_c8n80")
+
+[sub_resource type="Environment" id="Environment_uor2q"]
+background_mode = 2
+sky = SubResource("Sky_sn0xq")
+sky_rotation = Vector3(0, 0.68766, 0)
+fog_sky_affect = 0.1
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_uodo2")
+
+[node name="FieldGrid" type="Node3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_k62nf")
+rows = 10
+cols = 10
+row_spacing = 3.0
+col_spacing = 2.0
+
+[node name="Camera" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.254085, 12, 12)
+script = ExtResource("7_4g5f6")
+altitude = 20.0
+
+[node name="Camera3D" type="Camera3D" parent="Camera"]
+transform = Transform3D(1, 0, 0, 0, 0.853205, 0.521576, 0, -0.521576, 0.853205, 0, 0, 0)
+fov = 60.0
+far = 150.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.0347972, 0.715434, -0.697813, -0.513174, 0.586364, 0.626761, 0.857579, 0.379909, 0.346738, -9.974, 10, 4)
+light_color = Color(1, 0.92549, 0.74902, 1)
+light_energy = 1.2
+shadow_enabled = true
+directional_shadow_mode = 0
+directional_shadow_fade_start = 0.6
+directional_shadow_max_distance = 52.8
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_uor2q")

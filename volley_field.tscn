@@ -1,0 +1,287 @@
+[gd_scene load_steps=25 format=3 uid="uid://hsv5h30f7y5q"]
+
+[ext_resource type="Script" path="res://Scripts/VolleyFieldExportState.gd" id="1_8yf1d"]
+[ext_resource type="Script" path="res://Scripts/Player.gd" id="2_a5qk2"]
+[ext_resource type="Texture2D" uid="uid://cgl4af3d38ojn" path="res://Textures/NetTexture.png" id="3_5yumb"]
+[ext_resource type="Script" path="res://Scripts/Ball.gd" id="4_ckb67"]
+[ext_resource type="Texture2D" uid="uid://cjlgqy8aprapb" path="res://Textures/volley_sph.png" id="5_luqnt"]
+[ext_resource type="Texture2D" uid="uid://3g2wt4bkg1sa" path="res://Textures/sand.jpg" id="6_j32sw"]
+[ext_resource type="PhysicsMaterial" uid="uid://b7fpl6tllis44" path="res://Materials/bnd_material.tres" id="7_neay5"]
+[ext_resource type="Script" path="res://Scripts/ScoreBoard.gd" id="8_fq0vh"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_fqwxq"]
+radius = 0.7
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_o1vq3"]
+size = Vector3(0.14, 5, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eklts"]
+transparency = 2
+alpha_scissor_threshold = 0.032
+alpha_antialiasing_mode = 1
+alpha_antialiasing_edge = 0.17
+albedo_texture = ExtResource("3_5yumb")
+roughness = 0.0
+refraction_scale = -0.16
+uv1_scale = Vector3(0.336, 0.336, 0.336)
+uv1_offset = Vector3(0, 0.5, 0)
+uv1_triplanar = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_h1n8e"]
+size = Vector3(0.14, 7, 10)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vqsbq"]
+resource_name = "BallMaterial"
+bounce = 0.8
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_j8uib"]
+radius = 0.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j60nc"]
+albedo_texture = ExtResource("5_luqnt")
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ggj4n"]
+resource_name = "FloorMaterial"
+bounce = 0.23
+absorbent = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_es062"]
+size = Vector3(21, 0.5, 11)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gpmym"]
+albedo_texture = ExtResource("6_j32sw")
+uv1_scale = Vector3(2, 2, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nni88"]
+size = Vector3(21, 12, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ikk6y"]
+albedo_color = Color(0.776471, 0.709804, 0.607843, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_strxh"]
+size = Vector3(0.5, 12, 11)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e1kox"]
+albedo_color = Color(0.776471, 0.709804, 0.607843, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_y1yw4"]
+size = Vector3(21, 0.5, 11)
+
+[sub_resource type="SystemFont" id="SystemFont_dk0br"]
+font_names = PackedStringArray("DejaVu Sans Mono")
+subpixel_positioning = 0
+oversampling = 1.5
+
+[node name="VolleyField" type="Node3D"]
+script = ExtResource("1_8yf1d")
+
+[node name="PlayerLeft" type="CharacterBody3D" parent="." groups=["player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 0.8, 0)
+collision_layer = 4
+collision_mask = 19
+script = ExtResource("2_a5qk2")
+side = 1
+control = 1
+control_from = 1
+speed = 6.0
+jump_speed = 10.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerLeft"]
+shape = SubResource("SphereShape3D_fqwxq")
+metadata/_edit_group_ = true
+
+[node name="VisibleShape" type="CSGSphere3D" parent="PlayerLeft"]
+radius = 0.7
+metadata/_edit_group_ = true
+
+[node name="PlayerRight" type="CharacterBody3D" parent="." groups=["player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0.8, 0)
+collision_layer = 4
+collision_mask = 19
+script = ExtResource("2_a5qk2")
+side = -1
+control = 1
+control_from = 1
+speed = 6.0
+jump_speed = 10.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerRight"]
+shape = SubResource("SphereShape3D_fqwxq")
+metadata/_edit_group_ = true
+
+[node name="VisibleShape" type="CSGSphere3D" parent="PlayerRight"]
+radius = 0.7
+metadata/_edit_group_ = true
+
+[node name="Net" type="StaticBody3D" parent="."]
+collision_mask = 12
+
+[node name="NetCollisionBox" type="CollisionShape3D" parent="Net"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+shape = SubResource("BoxShape3D_o1vq3")
+metadata/_edit_group_ = true
+
+[node name="SouthPost" type="CSGCylinder3D" parent="Net"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 4.93)
+radius = 0.07
+height = 5.0
+metadata/_edit_group_ = true
+
+[node name="NorthPost" type="CSGCylinder3D" parent="Net"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -4.93)
+radius = 0.07
+height = 5.0
+metadata/_edit_group_ = true
+
+[node name="VisibleNet" type="CSGBox3D" parent="Net"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+size = Vector3(0.01, 3, 9.86)
+material = SubResource("StandardMaterial3D_eklts")
+metadata/_edit_group_ = true
+
+[node name="InvisWall" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+collision_layer = 16
+collision_mask = 4
+
+[node name="WallCollisionBox" type="CollisionShape3D" parent="InvisWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+shape = SubResource("BoxShape3D_h1n8e")
+metadata/_edit_group_ = true
+
+[node name="Ball" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 3.5, 0)
+collision_layer = 8
+collision_mask = 7
+mass = 0.33
+physics_material_override = SubResource("PhysicsMaterial_vqsbq")
+max_contacts_reported = 1
+contact_monitor = true
+sleeping = true
+script = ExtResource("4_ckb67")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ball"]
+shape = SubResource("SphereShape3D_j8uib")
+metadata/_edit_group_ = true
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="Ball"]
+radius = 0.4
+material = SubResource("StandardMaterial3D_j60nc")
+metadata/_edit_group_ = true
+
+[node name="Borders" type="Node3D" parent="."]
+
+[node name="Floor" type="StaticBody3D" parent="Borders" groups=["ground"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+collision_layer = 2
+collision_mask = 12
+physics_material_override = SubResource("PhysicsMaterial_ggj4n")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Borders/Floor"]
+shape = SubResource("BoxShape3D_es062")
+metadata/_edit_group_ = true
+
+[node name="FloorVisible" type="CSGBox3D" parent="Borders/Floor"]
+size = Vector3(21, 0.5, 11)
+material = SubResource("StandardMaterial3D_gpmym")
+metadata/_edit_group_ = true
+
+[node name="SouthWall" type="StaticBody3D" parent="Borders"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.25)
+collision_mask = 12
+physics_material_override = ExtResource("7_neay5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Borders/SouthWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
+shape = SubResource("BoxShape3D_nni88")
+metadata/_edit_group_ = true
+
+[node name="VisibleBox" type="CSGBox3D" parent="Borders/SouthWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+size = Vector3(21, 1, 0.5)
+material = SubResource("StandardMaterial3D_ikk6y")
+metadata/_edit_group_ = true
+
+[node name="NorthWall" type="StaticBody3D" parent="Borders"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.25)
+collision_mask = 12
+physics_material_override = ExtResource("7_neay5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Borders/NorthWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
+shape = SubResource("BoxShape3D_nni88")
+metadata/_edit_group_ = true
+
+[node name="VisibleBox" type="CSGBox3D" parent="Borders/NorthWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+size = Vector3(21, 1, 0.5)
+material = SubResource("StandardMaterial3D_ikk6y")
+metadata/_edit_group_ = true
+
+[node name="EastWall" type="StaticBody3D" parent="Borders"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.25, 0, 0)
+collision_mask = 12
+physics_material_override = ExtResource("7_neay5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Borders/EastWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
+shape = SubResource("BoxShape3D_strxh")
+metadata/_edit_group_ = true
+
+[node name="VisibleBox" type="CSGBox3D" parent="Borders/EastWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+size = Vector3(0.5, 1, 11)
+material = SubResource("StandardMaterial3D_e1kox")
+metadata/_edit_group_ = true
+
+[node name="WestWall" type="StaticBody3D" parent="Borders"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.25, 0, 0)
+collision_mask = 12
+physics_material_override = ExtResource("7_neay5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Borders/WestWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
+shape = SubResource("BoxShape3D_strxh")
+metadata/_edit_group_ = true
+
+[node name="VisibleBox" type="CSGBox3D" parent="Borders/WestWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+size = Vector3(0.5, 1, 11)
+material = SubResource("StandardMaterial3D_e1kox")
+metadata/_edit_group_ = true
+
+[node name="Ceiling" type="StaticBody3D" parent="Borders"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, 0)
+collision_mask = 12
+physics_material_override = ExtResource("7_neay5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Borders/Ceiling"]
+shape = SubResource("BoxShape3D_y1yw4")
+metadata/_edit_group_ = true
+
+[node name="ScoreBoard" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -5)
+script = ExtResource("8_fq0vh")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="ScoreBoard"]
+transform = Transform3D(1, 0, 0, 0, 0.697665, 0.716424, 0, -0.716424, 0.697665, 0, 0.15, -0.15)
+radius = 0.02
+height = 0.5
+metadata/_edit_group_ = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="ScoreBoard"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, -0.33)
+size = Vector3(2, 1, 0.03)
+metadata/_edit_group_ = true
+
+[node name="Display" type="Label3D" parent="ScoreBoard"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0064764, 0.792397, -0.293694)
+pixel_size = 0.03
+double_sided = false
+modulate = Color(0, 0.701961, 0.32549, 1)
+text = "00:00"
+font = SubResource("SystemFont_dk0br")
+font_size = 20
+outline_size = 5
+justification_flags = 0
+metadata/_edit_group_ = true
