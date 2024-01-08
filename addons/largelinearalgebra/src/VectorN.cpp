@@ -38,7 +38,8 @@ void VectorN::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("exp_"), &VectorN::exp_);
 	ClassDB::bind_method(D_METHOD("sigmoid_"), &VectorN::sigmoid_);
 	ClassDB::bind_method(D_METHOD("softmax_"), &VectorN::softmax_);
-	ClassDB::bind_method(D_METHOD("logits_to_pred_"), &VectorN::logits_to_pred_);
+	ClassDB::bind_method(D_METHOD("logits_to_pred_argmax_"), &VectorN::logits_to_pred_argmax_);
+	ClassDB::bind_method(D_METHOD("logits_to_pred_sample_"), &VectorN::logits_to_pred_sample_);
 }
 
 Ref<VectorN> VectorN::filled(double value, int size) {
@@ -186,8 +187,16 @@ void VectorN::softmax_() {
 	return;
 }
 
-void VectorN::logits_to_pred_() {
-	std::for_each(values.begin(), values.end(), [](double& x) {x = double(x >= 0.5); });
+void VectorN::logits_to_pred_argmax_() {
+	std::for_each(values.begin(), values.end(), [](double& x) {x = double(x >= 0.0); });
+	return;
+}
+
+
+void VectorN::logits_to_pred_sample_() {
+	sigmoid_();
+	std::for_each(values.begin(), values.end(), [](double& x) {x = double(std::rand() <= int(x*RAND_MAX)); });
+	return;
 }
 
 

@@ -8,6 +8,7 @@
 #include <numeric>
 #include <algorithm>
 #include <cmath>
+#include <cstdlib>
 
 
 namespace godot {
@@ -62,7 +63,8 @@ public:
     void exp_();
     void sigmoid_();
     void softmax_();
-    void logits_to_pred_();
+    void logits_to_pred_argmax_();
+    void logits_to_pred_sample_();
 
     PackedFloat64Array to_packed_array() const;
 };

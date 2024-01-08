@@ -50,9 +50,8 @@ func forward(vec, pred=true):
 		if i < (n-1):
 			x.leaky_relu_(leaky_relu_negative_slope)
 	if pred:
-		# this outputs prediction = logits > 0.5	
-		# (0.5 is a value midpoint for sigmoid)
-		x.logits_to_pred_()
+		# sample probabilities defined by sigmoid(logits)
+		x.logits_to_pred_sample_()
 	var predictions = x.to_packed_array()
 	return predictions 
 
